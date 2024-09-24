@@ -1,5 +1,5 @@
-perimetro :: Float -> Float
-perimetro x = 2 * pi * x
+perimetroCirc :: Float -> Float  -- Exercicio 1
+perimetroCirc x = 2 * pi * x
 
 dist :: (Double, Double) -> (Double, Double) -> Double
 dist (x1,y1) (x2,y2) = sqrt ((x2-x1)^2 + (y2-y1)^2)
@@ -21,7 +21,7 @@ max2 = max
 max3 :: Int -> Int -> Int -> Int
 max3 x y = max2 (max2 x y)
 
-nRaizes :: Float -> Float -> Float -> Int
+nRaizes :: Float -> Float -> Float -> Int  -- Exercicio 2
 nRaizes x y z
     | (y^2 - 4*x*z) < 0 = 0
     | (y^2 - 4*x*z) > 0 = 2
@@ -33,7 +33,7 @@ raizes x y z
     | nRaizes x y z == 1 = [(-y) / (2 * x)]
     | nRaizes x y z == 2 = [((-y) + sqrt (y^2 - 4 * x * z)) / (2 * x), ((-y) - sqrt (y^2 - 4 * x * z)) / (2 * x)]
 
-ahora :: (Int, Int) -> Bool
+ahora :: (Int, Int) -> Bool  -- Exercicio 3
 ahora (x, y) = (0 <= x && x <= 23) && (0 <= y && y <= 59)
 
 bhora :: (Int, Int) -> (Int, Int) -> Bool
@@ -55,9 +55,9 @@ ehora (x1, y1) (x2, y2)
 fhora :: Int -> (Int, Int) -> (Int, Int)
 fhora m (x, y) = dhora (chora (x + div m 60, y + mod m 60))
 
-data Hora = H Int Int deriving (Show,Eq)
+data Hora = H Int Int deriving (Show,Eq)  -- Exercicio 4
 
-aHora :: Hora -> Bool
+aHora :: Hora -> Bool  
 aHora (H x y) = (0 <= x && x <= 23) && (0 <= y && y <= 59)
 
 bHora :: Hora -> Hora -> Bool
@@ -79,9 +79,9 @@ eHora (H x1 y1) (H x2 y2)
 fHora :: Int -> Hora -> Hora
 fHora m (H x y) = dHora (cHora (H (x + div m 60) (y + mod m 60)))
 
-data Semaforo = Verde | Amarelo | Vermelho deriving (Show,Eq)
+data Semaforo = Verde | Amarelo | Vermelho deriving (Show,Eq)  -- Exercicio 5
 
-next :: Semaforo -> Semaforo
+next :: Semaforo -> Semaforo  
 next x
     | x == Verde = Amarelo
     | x == Amarelo = Vermelho
@@ -98,9 +98,9 @@ safe x y
     | (x == Vermelho) && (y == Verde) = True
     | otherwise = False
 
-data Ponto = Cartesiano Double Double | Polar Double Double deriving (Show,Eq)
+data Ponto = Cartesiano Double Double | Polar Double Double deriving (Show,Eq)  -- Exercicio 6
 
-posx :: Ponto -> Double
+posx :: Ponto -> Double  
 posx (Cartesiano x y) = x
 posx (Polar x y) = cos y * x
 
@@ -120,6 +120,46 @@ distancia :: Ponto -> Ponto -> Double
 distancia (Cartesiano x1 y1) (Cartesiano x2 y2) = sqrt ((x1-x2)^2 + (y1-y2)^2)
 distancia (Polar x1 y1) (Polar x2 y2) = sqrt ((posx (Polar x1 y1)-posx (Polar x2 y2))^2 + (posy (Polar x1 y1)-posy (Polar x2 y2))^2)
 
-data Figura = Circulo Ponto Double | Rectangulo Ponto Ponto | Triangulo Ponto Ponto Ponto deriving (Show,Eq)
+data Figura = Circulo Ponto Double | Rectangulo Ponto Ponto | Triangulo Ponto Ponto Ponto deriving (Show,Eq)  -- Exercicio 7
 
--- poligono :: Figura -> Bool
+poligono :: Figura -> Bool
+poligono (Circulo (Cartesiano x y) r) = False
+poligono (Circulo (Polar x alfa) r) = False
+poligono (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = True
+poligono (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = True
+poligono (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) = True
+poligono (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) = True
+
+vertices :: Figura -> [Ponto]
+vertices (Circulo (Cartesiano x y) r) = []
+vertices (Circulo (Polar x alfa) r) = []
+vertices (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = [Cartesiano x1 y1, Cartesiano x1 y2, Cartesiano x2 y1, Cartesiano x2 y2]
+vertices (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = [Polar x1 alfa, Polar x1 (angulo (Cartesiano x1 (posy (Polar x2 beta)))), Polar x2 (angulo (Cartesiano x2 (posy (Polar x1 alfa)))), Polar x2 beta]
+vertices (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) = [Cartesiano x1 y1, Cartesiano x2 y2, Cartesiano x3 y3]
+vertices (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) = [Polar x1 alfa, Polar x2 beta, Polar x3 gama]
+
+area :: Figura -> Double
+area (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) =
+    let a = dist (x1, y1) (x2, y2)
+        b = dist (x2, y2) (x3, y3)
+        c = dist (x3, y3) (x1, y1)
+        s = (a+b+c) / 2  -- semi-perimetro
+    in sqrt (s*(s-a)*(s-b)*(s-c))  -- formula de Heron
+area (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) = 
+    let a = dist (posx (Polar x1 alfa), posy (Polar x1 alfa)) (posx (Polar x2 beta), posy (Polar x2 beta))
+        b = dist (posx (Polar x2 beta), posy (Polar x2 beta)) (posx (Polar x3 gama), posy (Polar x3 gama))
+        c = dist (posx (Polar x3 gama), posy (Polar x3 gama)) (posx (Polar x1 alfa), posy (Polar x1 alfa))
+        s = (a+b+c) / 2  -- semi-perimetro
+    in sqrt (s*(s-a)*(s-b)*(s-c))  -- formula de Heron
+
+perimetro :: Figura -> Double
+perimetro (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) =
+    let a = dist (x1, y1) (x2, y2)
+        b = dist (x2, y2) (x3, y3)
+        c = dist (x3, y3) (x1, y1)
+    in a+b+c
+perimetro (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) = 
+    let a = dist (posx (Polar x1 alfa), posy (Polar x1 alfa)) (posx (Polar x2 beta), posy (Polar x2 beta))
+        b = dist (posx (Polar x2 beta), posy (Polar x2 beta)) (posx (Polar x3 gama), posy (Polar x3 gama))
+        c = dist (posx (Polar x3 gama), posy (Polar x3 gama)) (posx (Polar x1 alfa), posy (Polar x1 alfa))
+    in a+b+c
