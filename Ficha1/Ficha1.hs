@@ -49,7 +49,7 @@ dhora x = (div x 60, mod x 60)
 
 ehora :: (Int, Int) -> (Int, Int) -> Int
 ehora (x1, y1) (x2, y2)
-    | bhora (x1, y1) (x2, y2) = (24*60) - (chora (x1, y1) - chora (x2, y2))
+    | bhora (x1, y1) (x2, y2) = chora (x1, y1) - chora (x2, y2)
     | otherwise = chora (x2, y2) - chora (x1, y1)
 
 fhora :: Int -> (Int, Int) -> (Int, Int)
@@ -73,7 +73,7 @@ dHora x = H (div x 60) (mod x 60)
 
 eHora :: Hora -> Hora -> Int
 eHora (H x1 y1) (H x2 y2)
-    | bhora (x1, y1) (x2, y2) = (24*60) - (cHora (H x1 y1) - cHora (H x2 y2))
+    | bhora (x1, y1) (x2, y2) = cHora (H x1 y1) - cHora (H x2 y2)
     | otherwise = cHora (H x2 y2) - cHora (H x1 y1)
 
 fHora :: Int -> Hora -> Hora
@@ -170,4 +170,22 @@ perimetro (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) =
         b = dist (posx (Polar x2 beta), posy (Polar x2 beta)) (posx (Polar x3 gama), posy (Polar x3 gama))
         c = dist (posx (Polar x3 gama), posy (Polar x3 gama)) (posx (Polar x1 alfa), posy (Polar x1 alfa))
     in a+b+c
--- falta adicionar os perimetros do circulo e rectangulo
+
+
+{-
+perimetro (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = 
+    let a = dist (posx (Polar x1 alfa), posy (Polar x1 alfa)) (posx (Polar x2 beta), posy (Polar x2 beta))
+        b = dist (posx (Polar x2 beta), posy (Polar x2 beta)) (posx (Polar x3 gama), posy (Polar x3 gama))
+    in 2*a+2*b+c
+
+
+perimetro (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = 
+    let b = abs (posx (Polar x1 alfa) - posx (Polar x2 beta))
+        h = abs (posy (Polar x1 alfa) - posy (Polar x2 beta))
+    in b*h
+
+
+-}
+
+perimetro (Circulo (Cartesiano x1 y1) r) = 2*pi*r
+perimetro (Circulo (Polar x alfa) r) = 2*pi*r
