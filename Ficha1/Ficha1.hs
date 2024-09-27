@@ -96,8 +96,7 @@ stop x
 
 safe :: Semaforo -> Semaforo -> Bool
 safe x y
-    | (x == Verde) && (y == Vermelho) = True
-    | (x == Vermelho) && (y == Verde) = True
+    | (x == Vermelho) || (y == Vermelho) = True
     | otherwise = False
 
 data Ponto = Cartesiano Double Double | Polar Double Double deriving (Show,Eq)  -- Exercicio 6
@@ -189,3 +188,4 @@ isDigit x = (ord x >= 48) && (ord x <= 57)
 isAlpha :: Char -> Bool
 isAlpha x = ((ord x >= 65) && (ord x <= 90)) || ((ord x >= 97) && (ord x <= 122))
 
+toUpper :: Char -> Char
