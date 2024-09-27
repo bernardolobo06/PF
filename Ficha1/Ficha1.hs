@@ -186,3 +186,6 @@ isLower x = (ord x >= 97) && (ord x <= 122)
 isDigit :: Char -> Bool
 isDigit x = (ord x >= 48) && (ord x <= 57)
 
+isAlpha :: Char -> Bool
+isAlpha x = ((ord x >= 65) && (ord x <= 90)) || ((ord x >= 97) && (ord x <= 122))
+
