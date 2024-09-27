@@ -1,3 +1,5 @@
+import Data.Char
+
 perimetroCirc :: Float -> Float  -- Exercicio 1
 perimetroCirc x = 2 * pi * x
 
@@ -177,3 +179,4 @@ perimetro (Rectangulo (Polar x1 alfa) (Polar x2 beta)) =
     in 2*b + 2*h
 perimetro (Circulo (Cartesiano x1 y1) r) = 2*pi*r
 perimetro (Circulo (Polar x alfa) r) = 2*pi*r
+
