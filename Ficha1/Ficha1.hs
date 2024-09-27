@@ -183,3 +183,6 @@ perimetro (Circulo (Polar x alfa) r) = 2*pi*r
 isLower :: Char -> Bool -- Exercicio 8
 isLower x = (ord x >= 97) && (ord x <= 122)
 
+isDigit :: Char -> Bool
+isDigit x = (ord x >= 48) && (ord x <= 57)
+
