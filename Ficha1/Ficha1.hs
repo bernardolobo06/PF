@@ -176,21 +176,21 @@ perimetro (Circulo (Cartesiano x1 y1) r) = 2*pi*r
 perimetro (Circulo (Polar x alfa) r) = 2*pi*r
 
 isLower' :: Char -> Bool -- Exercicio 8
-isLower' x = (ord x >= 97) && (ord x <= 122)
+isLower' x = (ord x >= ord 'a') && (ord x <= ord 'z')
 
 isDigit' :: Char -> Bool
-isDigit' x = (ord x >= 48) && (ord x <= 57)
+isDigit' x = (ord x >= ord '0') && (ord x <= ord '9')
 
 isAlpha' :: Char -> Bool
-isAlpha' x = ((ord x >= 65) && (ord x <= 90)) || isLower' x
+isAlpha' x = ((ord x >= ord 'A') && (ord x <= ord 'Z')) || isLower' x
 
 toUpper' :: Char -> Char
 toUpper' x
     | isAlpha' x = x
-    | isLower' x = chr (ord x - 32)
+    | isLower' x = chr (ord x - (ord 'a' - ord 'A'))
 
 intToDigit' :: Int -> Char
-intToDigit' x = chr (x + 48)
-
+intToDigit' x = chr (x + ord '0')
+ 
 digitToInt' :: Char -> Int
-digitToInt' x = ord x - 48
+digitToInt' x = ord x - ord '0'  -- no Data.Char dá 10, no meu dá 17 com o exemplo do caracter 'A'
