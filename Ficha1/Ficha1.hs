@@ -55,7 +55,7 @@ ehora (x1, y1) (x2, y2)
     | otherwise = chora (x2, y2) - chora (x1, y1)
 
 fhora :: Int -> (Int, Int) -> (Int, Int)
-fhora m (x, y) = dhora (chora (x + div m 60, y + mod m 60))
+fhora m (x, y) = dhora (chora (x + div m 60, y + mod m 60))   -- acho que está a dar mal pk dei 650 e deu a hora 118 (analisar ainda o fHora)
 
 data Hora = H Int Int deriving (Show,Eq)  -- Exercicio 4
 
@@ -179,4 +179,7 @@ perimetro (Rectangulo (Polar x1 alfa) (Polar x2 beta)) =
     in 2*b + 2*h
 perimetro (Circulo (Cartesiano x1 y1) r) = 2*pi*r
 perimetro (Circulo (Polar x alfa) r) = 2*pi*r
+
+isLower :: Char -> Bool -- Exercicio 8
+isLower x = (ord x >= 97) && (ord x <= 122)
 
