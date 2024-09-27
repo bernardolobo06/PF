@@ -170,22 +170,10 @@ perimetro (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) =
         b = dist (posx (Polar x2 beta), posy (Polar x2 beta)) (posx (Polar x3 gama), posy (Polar x3 gama))
         c = dist (posx (Polar x3 gama), posy (Polar x3 gama)) (posx (Polar x1 alfa), posy (Polar x1 alfa))
     in a+b+c
-
-
-{-
-perimetro (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = 
-    let a = dist (posx (Polar x1 alfa), posy (Polar x1 alfa)) (posx (Polar x2 beta), posy (Polar x2 beta))
-        b = dist (posx (Polar x2 beta), posy (Polar x2 beta)) (posx (Polar x3 gama), posy (Polar x3 gama))
-    in 2*a+2*b+c
-
-
+perimetro (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = (2 * abs (x1-x2)) + (2 * abs (y1-y2))
 perimetro (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = 
     let b = abs (posx (Polar x1 alfa) - posx (Polar x2 beta))
         h = abs (posy (Polar x1 alfa) - posy (Polar x2 beta))
-    in b*h
-
-
--}
-
+    in 2*b + 2*h
 perimetro (Circulo (Cartesiano x1 y1) r) = 2*pi*r
 perimetro (Circulo (Polar x alfa) r) = 2*pi*r
