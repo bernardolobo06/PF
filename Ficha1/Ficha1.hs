@@ -151,6 +151,13 @@ area (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) =
         c = dist (posx (Polar x3 gama), posy (Polar x3 gama)) (posx (Polar x1 alfa), posy (Polar x1 alfa))
         s = (a+b+c) / 2  -- semi-perimetro
     in sqrt (s*(s-a)*(s-b)*(s-c))  -- formula de Heron
+area (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = abs (x1-x2) * (y1-y2)
+area (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = 
+    let b = abs (posx (Polar x1 alfa) - posx (Polar x2 beta))
+        h = abs (posy (Polar x1 alfa) - posy (Polar x2 beta))
+    in b*h
+area (Circulo (Cartesiano x1 y1) r) = pi*r^2
+area (Circulo (Polar x alfa) r) = pi*r^2 
 
 perimetro :: Figura -> Double
 perimetro (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) =
@@ -163,3 +170,4 @@ perimetro (Triangulo (Polar x1 alfa) (Polar x2 beta) (Polar x3 gama)) =
         b = dist (posx (Polar x2 beta), posy (Polar x2 beta)) (posx (Polar x3 gama), posy (Polar x3 gama))
         c = dist (posx (Polar x3 gama), posy (Polar x3 gama)) (posx (Polar x1 alfa), posy (Polar x1 alfa))
     in a+b+c
+-- falta adicionar os perimetros do circulo e rectangulo
