@@ -1,4 +1,5 @@
 import Data.Char
+import GHC.IO.Handle.Types (isAppendHandleType)
 
 perimetroCirc :: Float -> Float  -- Exercicio 1
 perimetroCirc x = 2 * pi * x
@@ -126,13 +127,13 @@ data Figura = Circulo Ponto Double | Rectangulo Ponto Ponto | Triangulo Ponto Po
 poligono :: Figura -> Bool
 poligono (Circulo (Cartesiano x y) r) = False
 poligono (Circulo (Polar x alfa) r) = False
-poligono = True
+--poligono = True
 
 vertices :: Figura -> [Ponto]
 vertices (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = [Cartesiano x1 y1, Cartesiano x1 y2, Cartesiano x2 y1, Cartesiano x2 y2]
 vertices (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = [Polar x1 alfa, Polar x1 (angulo (Cartesiano x1 (posy (Polar x2 beta)))), Polar x2 (angulo (Cartesiano x2 (posy (Polar x1 alfa)))), Polar x2 beta]
 vertices (Triangulo x y z) = [x, y, z]
-vertices = []
+--vertices = []
 
 area :: Figura -> Double
 area (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) =
@@ -174,13 +175,22 @@ perimetro (Rectangulo (Polar x1 alfa) (Polar x2 beta)) =
 perimetro (Circulo (Cartesiano x1 y1) r) = 2*pi*r
 perimetro (Circulo (Polar x alfa) r) = 2*pi*r
 
-isLower :: Char -> Bool -- Exercicio 8
-isLower x = (ord x >= 97) && (ord x <= 122)
+isLower' :: Char -> Bool -- Exercicio 8
+isLower' x = (ord x >= 97) && (ord x <= 122)
 
-isDigit :: Char -> Bool
-isDigit x = (ord x >= 48) && (ord x <= 57)
+isDigit' :: Char -> Bool
+isDigit' x = (ord x >= 48) && (ord x <= 57)
 
-isAlpha :: Char -> Bool
-isAlpha x = ((ord x >= 65) && (ord x <= 90)) || ((ord x >= 97) && (ord x <= 122))
+isAlpha' :: Char -> Bool
+isAlpha' x = ((ord x >= 65) && (ord x <= 90)) || isLower' x
 
-toUpper :: Char -> Char
+toUpper' :: Char -> Char
+toUpper' x
+    | isAlpha' x = x
+    | isLower' x = chr (ord x - 32)
+
+intToDigit' :: Int -> Char
+intToDigit' x = chr (x + 48)
+
+digitToInt' :: Char -> Int
+digitToInt' x = ord x - 48
