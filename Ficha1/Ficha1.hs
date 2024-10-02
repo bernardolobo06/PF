@@ -1,5 +1,4 @@
 import Data.Char
-import GHC.IO.Handle.Types (isAppendHandleType)
 
 perimetroCirc :: Float -> Float  -- Exercicio 1
 perimetroCirc x = 2 * pi * x
@@ -48,7 +47,7 @@ chora :: (Int, Int) -> Int
 chora (x, y) = (x * 60) + y
 
 dhora :: Int -> (Int, Int)
-dhora x = (div x 60, mod x 60)
+dhora x = (mod (div x 60) 24, mod x 60)
 
 ehora :: (Int, Int) -> (Int, Int) -> Int
 ehora (x1, y1) (x2, y2)
@@ -56,7 +55,7 @@ ehora (x1, y1) (x2, y2)
     | otherwise = chora (x2, y2) - chora (x1, y1)
 
 fhora :: Int -> (Int, Int) -> (Int, Int)
-fhora m (x, y) = dhora (chora (x + div m 60, y + mod m 60))   -- acho que está a dar mal pk dei 650 e deu a hora 118 (analisar ainda o fHora)
+fhora m (x, y) = dhora (chora (x + div m 60, y + mod m 60))
 
 data Hora = H Int Int deriving (Show,Eq)  -- Exercicio 4
 
@@ -72,7 +71,7 @@ cHora :: Hora -> Int
 cHora (H x y) = (x * 60) + y
 
 dHora :: Int -> Hora
-dHora x = H (div x 60) (mod x 60)
+dHora x = H (mod (div x 60) 24) (mod x 60)
 
 eHora :: Hora -> Hora -> Int
 eHora (H x1 y1) (H x2 y2)
@@ -127,13 +126,13 @@ data Figura = Circulo Ponto Double | Rectangulo Ponto Ponto | Triangulo Ponto Po
 poligono :: Figura -> Bool
 poligono (Circulo (Cartesiano x y) r) = False
 poligono (Circulo (Polar x alfa) r) = False
---poligono = True
+poligono figura = True
 
 vertices :: Figura -> [Ponto]
 vertices (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = [Cartesiano x1 y1, Cartesiano x1 y2, Cartesiano x2 y1, Cartesiano x2 y2]
 vertices (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = [Polar x1 alfa, Polar x1 (angulo (Cartesiano x1 (posy (Polar x2 beta)))), Polar x2 (angulo (Cartesiano x2 (posy (Polar x1 alfa)))), Polar x2 beta]
 vertices (Triangulo x y z) = [x, y, z]
---vertices = []
+vertices figura = []
 
 area :: Figura -> Double
 area (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) =
