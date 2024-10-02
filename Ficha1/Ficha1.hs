@@ -126,13 +126,13 @@ data Figura = Circulo Ponto Double | Rectangulo Ponto Ponto | Triangulo Ponto Po
 poligono :: Figura -> Bool
 poligono (Circulo (Cartesiano x y) r) = False
 poligono (Circulo (Polar x alfa) r) = False
-poligono __ = True
+poligono _ = True
 
 vertices :: Figura -> [Ponto]
 vertices (Rectangulo (Cartesiano x1 y1) (Cartesiano x2 y2)) = [Cartesiano x1 y1, Cartesiano x1 y2, Cartesiano x2 y1, Cartesiano x2 y2]
 vertices (Rectangulo (Polar x1 alfa) (Polar x2 beta)) = [Polar x1 alfa, Polar x1 (angulo (Cartesiano x1 (posy (Polar x2 beta)))), Polar x2 (angulo (Cartesiano x2 (posy (Polar x1 alfa)))), Polar x2 beta]
 vertices (Triangulo x y z) = [x, y, z]
-vertices __ = []
+vertices _ = []
 
 area :: Figura -> Double
 area (Triangulo (Cartesiano x1 y1) (Cartesiano x2 y2) (Cartesiano x3 y3)) =
