@@ -42,3 +42,35 @@ sumTriplos :: (Num a, Num b, Num c) => [(a,b,c)] -> (a,b,c)
 sumTriplos [(a,b,c)] =
 sumTriplos ((a,b,c):ys) =
 -}
+
+---Exercicio 3---
+
+
+
+
+---Exercicio 4---
+
+type Polinomio = [Monomio]
+type Monomio = (Float,Int)
+
+conta :: Int -> Polinomio -> Int
+conta _ [] = 0
+conta n ((_,e):t) 
+    | e == n = 1 + conta n t
+    | otherwise = conta n t
+
+grau :: Polinomio -> Int
+grau [] = 0
+grau ((_,e):t) = max e (grau t)
+
+---passou para a alinea h)---
+
+
+-- função auxiliar da alinea h)--
+insere :: Monomio -> Polinomio -> Polinomio
+insere (c,e) [] = [(c,e)]
+insere (c,e) ((cp,ep):t) = if e == ep then (c+cp, e) : t else (cp,ep) : insere (c,e) t
+
+normaliza :: Polinomio -> Polinomio
+normaliza [] = []
+normaliza ((c,e):t) = insere (c,e) (normaliza t)
