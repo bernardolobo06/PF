@@ -190,6 +190,8 @@ toUpper' x
 
 intToDigit' :: Int -> Char
 intToDigit' x = chr (x + ord '0')
- 
+
+{- 
 digitToInt' :: Char -> Int
-digitToInt' x = ord x - ord '0'  -- no Data.Char dá 10, no meu dá 17 com o exemplo do caracter 'A'
+digitToInt' x = ord x - ord '0'
+-}
