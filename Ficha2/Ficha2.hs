@@ -1,3 +1,44 @@
-funA :: [Double] -> Double
-funA [] = 0
-funA (y:ys) = y^2 + (funA ys)
+dobros :: [Float] -> [Float]
+dobros [y] = [y*2]
+dobros (y:ys) = (y*2) : dobros ys
+
+numOcorre :: Char -> String -> Int
+numOcorre char [] = 0
+numOcorre char (y:ys)
+    | char == y = 1 + numOcorre char ys
+    | char /= y = 0 + numOcorre char ys
+
+positivos :: [Int] -> Bool
+positivos [i] = i > 0
+positivos (y:ys) =  y > 0 && positivos ys
+
+soPos :: [Int] -> [Int]
+soPos [] = []
+soPos (y:ys)
+    | y > 0 = y : soPos ys
+    | otherwise = soPos ys
+
+somaNeg :: [Int] -> Int
+somaNeg [] = 0
+somaNeg (y:ys)
+    | y < 0 = y + somaNeg ys
+    | otherwise = somaNeg ys
+
+tresUlt :: [a] -> [a]
+tresUlt (y:ys)
+    | length (y:ys) <= 3 = y:ys
+    | otherwise = tresUlt ys
+
+segundos :: [(a,b)] -> [b]
+segundos [(a,b)] = [b]
+segundos ((a,b):ys) = b : segundos ys
+
+nosPrimeiros :: (Eq a) => a -> [(a,b)] -> Bool
+nosPrimeiros e [(a,b)] = e == a
+nosPrimeiros e ((a,b):ys) = e == a || nosPrimeiros e ys
+
+{-
+sumTriplos :: (Num a, Num b, Num c) => [(a,b,c)] -> (a,b,c)
+sumTriplos [(a,b,c)] =
+sumTriplos ((a,b,c):ys) =
+-}
