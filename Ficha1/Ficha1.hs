@@ -1,3 +1,4 @@
+module Ficha1 where
 import Data.Char
 
 perimetroCirc :: Float -> Float  -- Exercicio 1

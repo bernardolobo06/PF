@@ -1,3 +1,5 @@
+module Ficha2 where
+    
 dobros :: [Float] -> [Float]
 dobros [y] = [y*2]
 dobros (y:ys) = (y*2) : dobros ys
