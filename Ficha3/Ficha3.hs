@@ -1,10 +1,10 @@
 module Ficha3 where
-import Language.Haskell.TH (viaStrategy)
-    
-data Hora = H Int Int deriving Show
+
+--escrever documentação haddock
+
+data Hora = H Int Int deriving Show  -- Exercício 1
 type Etapa = (Hora, Hora)
 type Viagem = [Etapa]
-
 
 horaValida :: Hora -> Bool  
 horaValida (H h m) = (0 <= h && h <= 23) && (0 <= m && m <= 59)
@@ -21,5 +21,5 @@ etapaValida :: Etapa -> Bool
 etapaValida (init, end) = horaValida init && horaValida end && maiorHora end init
 
 viagemValida :: Viagem -> Bool
-viagemValida [e1, e2] = etapaValida e1 && etapaValida e2 && maiorHora (fst e2) (snd e1)
-viagemValida (e1:e2:t) = etapaValida e1 && etapaValida e2 && maiorHora (fst e2) (snd e1) && viagemValida (e2:t)
+viagemValida [e] = etapaValida e
+viagemValida (e1:e2:t) = etapaValida e1 && maiorHora (fst e2) (snd e1) && viagemValida (e2:t)  -- && etapaValida e2 was removed cause it is redundant since this is verified once the recursive call begins.
