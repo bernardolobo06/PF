@@ -192,7 +192,9 @@ toUpper' x
 intToDigit' :: Int -> Char
 intToDigit' x = chr (x + ord '0')
 
-{- 
+--works for hexadecimal digits: '0'...'9' && ('a'...'f' || 'A'...'F')
 digitToInt' :: Char -> Int
-digitToInt' x = ord x - ord '0'
--}
+digitToInt' x
+    | ord x - ord '0' >= 0 && ord x - ord '9' <= 0 = ord x - ord '0'
+    | ord x - ord 'a' >= 0 && ord x - ord 'f' <= 0 = ord x - ord 'a' + 10
+    | ord x - ord 'A' >= 0 && ord x - ord 'F' <= 0 = ord x - ord 'A' + 10
