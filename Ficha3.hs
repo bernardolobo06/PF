@@ -60,8 +60,8 @@ addEmail nome email ((n, c):cs)
 
 emails :: [Contacto] -> [String]
 emails [] = []
-emails [(Email x) : cs] = x : emails cs
-emails [_ : cs] = emails cs
+emails ((Email x) : cs) = x : emails cs
+emails (_ : cs) = emails cs
 
 getEmail :: Nome -> Agenda -> Maybe [String]
 getEmail nome [] = Nothing

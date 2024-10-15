@@ -82,14 +82,56 @@ grau :: Polinomio -> Int
 grau [] = 0
 grau ((_,e):t) = max e (grau t)
 
----passou para a alinea h)---
+selgrau :: Int -> Polinomio -> Polinomio
+selgrau _ [] = []
+selgrau n ((b, e):t)
+    | e == n = (b, e) : selgrau n t
+    | otherwise = selgrau n t
 
+deriv :: Polinomio -> Polinomio
+deriv [] = []
+deriv ((b, e):t) = (b*fromIntegral e, e-1) : deriv t
 
--- auxiliar function for h)
-insere :: Monomio -> Polinomio -> Polinomio
-insere (c,e) [] = [(c,e)]
-insere (c,e) ((cp,ep):t) = if e == ep then (c+cp, e) : t else (cp,ep) : insere (c,e) t
+calcula :: Float -> Polinomio -> Float
+calcula _ [] = 0
+calcula n ((b, e):t) = (b*(n^e)) + calcula n t
 
-normaliza :: Polinomio -> Polinomio
+simp :: Polinomio -> Polinomio
+simp [] = []
+simp ((b, e):t)
+    | e == 0 = simp t
+    | otherwise = (b, e) : simp t
+
+mult :: Monomio -> Polinomio -> Polinomio
+mult _ [] = []
+mult (a, x) ((b, e):t) = (a*b, x+e) : mult (a, x) t
+
+normaliza :: Polinomio -> Polinomio           -------------------------------------------------------------------------------------------------
 normaliza [] = []
 normaliza ((c,e):t) = insere (c,e) (normaliza t)
+
+--auxiliar function for normaliza
+insere :: Monomio -> Polinomio -> Polinomio
+insere (c,e) [] = [(c,e)]
+insere (c,e) ((cp,ep):t) = if e == ep then (c+cp, e) : t else (cp,ep) : insere (c,e) t -----------------------------------------REVER ALINEA H)
+
+soma :: Polinomio -> Polinomio -> Polinomio
+soma p1 p2 = normaliza (p1 ++ p2)
+
+produto :: Polinomio -> Polinomio -> Polinomio
+produto [] _ = []
+produto (h:t) p2 = normaliza (mult h p2 ++ produto t p2)
+
+ordena :: Polinomio -> Polinomio             ---------------------------------------------------------------------------------------------------
+ordena [] = []
+ordena pol = insert (head (normaliza pol)) (ordena (tail (normaliza pol)))
+
+--auxiliar function
+insert :: Monomio -> Polinomio -> Polinomio
+insert (c,e) [] = [(c,e)]
+insert (c,e) ((cp,ep):ys)
+    | e <= ep = (c,e):(cp,ep):ys
+    | otherwise = (cp,ep) : insert (c,e) ys         ------------------------------------------------------------------------------REVER INSERTION SORT
+
+equiv :: Polinomio -> Polinomio -> Bool
+equiv p1 p2 = ordena (normaliza p1) == ordena (normaliza p2)
