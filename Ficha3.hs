@@ -82,27 +82,6 @@ zoom esc (h:t) = h : aux h t
             in Cartesiano (x0 + dx) (y0 + dy) : aux (Cartesiano x0 y0) t
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- Exercício 3
 data Contacto = Casa Integer | Trab Integer | Tlm Integer | Email String deriving Show
 type Nome = String
@@ -127,15 +106,28 @@ getEmail nome ((n, c):cs)
     | otherwise = getEmail nome cs
 ---------------------------------------------
 
+consTelefs :: [Contacto] -> [Integer]
+consTelefs [] = []
+consTelefs (h:t) = aux h ++ consTelefs t
+    where aux (Casa n)  = [n]
+          aux (Trab n)  = [n]
+          aux (Tlm n)   = [n]
+          aux (Email n)  = []
+
+casa :: Nome -> Agenda -> Maybe Integer
+casa nome [] = Nothing
+casa nome ((n, c):cs)
+    | nome == n = aux c
+    | otherwise = casa nome cs
+        where aux [] = Nothing
+              aux ((Casa n):t)  = Just n
+              aux ((Trab n):t)  = aux t
+              aux ((Tlm n):t)   = aux t
+              aux ((Email n):t) = aux t
 
 
 
-
-
-
-
-
-------- TPC Pavlo P'Yatkovsky
+-------- TPC Pavlo P'Yatkovsky --------
 elemIndice :: Eq a => a -> [a] -> [Int]
 elemIndice el ls = aux el 0 ls
     where aux x p (h:t)
