@@ -124,13 +124,3 @@ casa nome ((n, c):cs)
               aux ((Trab n):t)  = aux t
               aux ((Tlm n):t)   = aux t
               aux ((Email n):t) = aux t
-
-
-
--------- TPC Pavlo P'Yatkovsky --------
-elemIndice :: Eq a => a -> [a] -> [Int]
-elemIndice el ls = aux el 0 ls
-    where aux x p (h:t)
-            | x == h = p : aux x (p+1) t
-            | x /= h = aux x (p+1) t
-          aux _ _ [] = []
