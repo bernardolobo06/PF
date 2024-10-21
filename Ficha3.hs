@@ -1,8 +1,8 @@
 module Ficha3 where
 
-import Ficha1 (Hora (..), aHora, bHora, 
-               Ponto (..), posx, posy, distancia, 
-               Figura (..), area) --obrigatório importar os construtores do data type. ao usar (..) todos os construtores são importados
+import Ficha1 (Hora (..), aHora, bHora,
+               Ponto (..), posx, posy, distancia,
+               Figura (..), area, raio) --obrigatório importar os construtores do data type. ao usar (..) todos os construtores são importados
 
 --escrever documentação haddock
 
@@ -124,3 +124,121 @@ casa nome ((n, c):cs)
               aux ((Trab n):t)  = aux t
               aux ((Tlm n):t)   = aux t
               aux ((Email n):t) = aux t
+
+
+-- Exercício 4
+type Dia = Int
+type Mes = Int
+type Ano = Int
+--type Nome = String
+
+data Data = D Dia Mes Ano deriving Show
+
+type TabDN = [(Nome,Data)]
+
+{-
+testeTabDN :: TabDN
+testeTabDN = [("Inês", D 27 08 2006), ("Luis", D 16 12 2003), ("Joana", D 17 10 2004)]
+-}
+
+procura :: Nome -> TabDN -> Maybe Data
+procura _ [] = Nothing
+procura nome ((n,d):t)
+    | nome == n = Just d
+    | otherwise = procura nome t
+
+{-
+idade :: Data -> Nome -> TabDN -> Maybe Int
+idade _ _ [] = Nothing
+idade date nome ((n,d):t)
+    | nome == n = aux date d
+    | otherwise = idade date nome t
+        where aux (D dia mes ano) (D d m a)
+                | ano == a = Just 0
+                | (mes <= m) && (ano > a) = if (mes == m) && (dia >= d) then Just (ano - a) else Just (ano - a - 1)
+                | otherwise = Just (ano - a)
+-}  -- este código está mais correto mas a ideia é ir buscar à função anterior
+
+-- nesta versão ignoramos o dia e o mês
+idade :: Data -> Nome -> TabDN -> Maybe Int
+idade date name tdn = case procura name tdn of
+                      Nothing -> Nothing
+                      (Just d) -> Just (aux date d)
+                            where aux (D _ _ a1) (D _ _ a2) = a1 - a2
+
+-- o primeiro é anterior ao segundo
+anterior :: Data -> Data -> Bool
+anterior (D d m a) (D dia mes ano)
+    | a < ano = True
+    | a == ano = m < mes || (m == mes && d < dia) 
+    | otherwise = False
+
+
+------------ auxiliar function (down) ------------
+insere :: (Nome, Data) -> TabDN -> TabDN
+insere (na, da) [] = [(na, da)]
+insere (na, da) ((n, d):xs)
+    | anterior da d = (na, da):(n, d):xs
+    | otherwise = (n,d):insere (na, da) xs
+-------------------------------------------
+
+ordena :: TabDN -> TabDN
+ordena [] = []
+ordena (a:as) = insere a as
+
+-- passamos a alinea e)
+
+
+-- Exercicio 5
+data Movimento = Credito Float | Debito Float deriving Show
+--data Data = D Int Int Int deriving Show
+data Extracto = Ext Float [(Data, String, Movimento)] deriving Show
+
+outubro :: Extracto
+outubro = Ext 100.4
+              [ (D 1 10 24, "ATM", Debito 50)
+              , (D 1 10 24, "EDP", Debito 25)
+              , (D 1 10 24, "ATM", Credito 850)
+              ]
+
+--------- auxiliar function (down) ---------------------
+valMov :: Movimento -> Float
+valMov (Credito x) = x
+valMov (Debito x) = x
+--------------------------------------------------------
+
+extValor :: Extracto -> Float -> [Movimento]
+extValor (Ext _ mvs) val = extMvs mvs val
+    where extMvs :: [(Data, String, Movimento)] -> Float -> [Movimento]
+          extMvs [] _ = []
+          extMvs ((_, _, m):t) v
+            | valMov m > v = m : extMvs t v
+            | otherwise = extMvs t v
+
+filtro :: Extracto -> [String] -> [(Data,Movimento)]
+filtro _ [] = []
+filtro (Ext val mvs) (x:xs) = extMvs mvs x ++ filtro (Ext val mvs) xs 
+    where extMvs :: [(Data, String, Movimento)] -> String -> [(Data, Movimento)]
+          extMvs [] _ = []
+          extMvs ((d, n, m):t) fltr
+            | n == fltr = (d, m) : extMvs t fltr
+            | otherwise = extMvs t fltr
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------- do teste
+bub :: Ord a => [a] -> [a]
+bub [a] = [a]
+bub (x:y:ys)
+    | x <= z = x:z:zs
+    | otherwise = z:x:zs
+    where (z:zs) = bub (y:ys)
