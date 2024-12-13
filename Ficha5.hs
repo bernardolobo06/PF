@@ -1,8 +1,6 @@
 module Ficha5 where
 
 import Data.List
-import Type.Reflection (SomeTypeRep(SomeTypeRep))
-import Data.Type.Coercion (trans)
 
 any' :: (a -> Bool) -> [a] -> Bool
 any' pred [] = False
@@ -59,13 +57,66 @@ transpose' :: Mat a -> Mat a
 transpose' mat | null (head mat) = []
                | otherwise = map head mat : transpose' (map tail mat)
 
+----------------------------------------------------------- EX2
 
+type Polinomio = [Monomio]
+type Monomio = (Float, Int)
 
+pol :: Polinomio
+pol = [(2,3), (3,4), (5,3), (4,5)]
 
------------------- Teste
-matriz :: Mat Int
-matriz = [[1,2,3],
-          [0,4,5],
-          [0,0,6]]
+selgrau :: Int -> Polinomio -> Polinomio
+selgrau n p = filter (\(_, e) -> e == n) p
 
-test = transpose' matriz
+selgrau' :: Int -> Polinomio -> Polinomio
+selgrau' _ [] = []
+selgrau' n ((c,e):t) | n == e    = (c,e) : selgrau' n t
+                     | otherwise = selgrau' n t
+
+conta :: Int -> Polinomio -> Int
+conta n p = foldr (\(_, e) ac -> if e == n then ac+1 else ac) 0 p
+
+conta' :: Int -> Polinomio -> Int
+conta' _ [] = 0
+conta' n (p:ps) = aux p + conta' n ps
+    where aux (_, e) = if e == n then 1 else 0
+
+conta'' :: Int -> Polinomio -> Int
+conta'' n p = length (selgrau n p)
+
+grau :: Polinomio -> Int
+grau p = foldr (\(_,e) grau -> if e > grau then e else grau) 0 p
+
+grau' :: Polinomio -> Int
+grau' [] = 0
+grau' (p:ps) | aux p > grau' ps = aux p
+             | otherwise        = grau' ps
+    where aux (_, e) = e
+
+deriv :: Polinomio -> Polinomio
+deriv p = map (\(c, e) -> (c * fromIntegral e, e-1)) (filter (\(_,e) -> e > 0) p)
+
+deriv' :: Polinomio -> Polinomio
+deriv' p = foldr (\(c, e) ac -> if e > 0 then (c * fromIntegral e, e - 1) : ac else ac) [] p
+
+deriv'' :: Polinomio -> Polinomio
+deriv'' [] = []
+deriv'' (p:ps) = aux p ++ deriv' ps
+    where aux (c,e) | e > 0     = [(c * fromIntegral e, e-1)]
+                    | otherwise = []
+
+calcula :: Float -> Polinomio -> Float
+calcula x p = foldr (\(c, e) ac -> ac + c * x^e) 0 p
+
+calcula' :: Float -> Polinomio -> Float
+calcula' x p = sum (map (\(c, e) -> c * x^e) p)
+
+mult :: Monomio -> Polinomio -> Polinomio
+mult (cm, em) p = foldr (\(c, e) ac -> (cm * c, em + e):ac) [] p
+
+mult' :: Monomio -> Polinomio -> Polinomio
+mult' (cm, em) p = map (\(c, e) -> (cm * c, em + e)) p
+
+mult'' :: Monomio -> Polinomio -> Polinomio
+mult'' _ [] = []
+mult'' (cm, em) ((c,e):ps) = (cm * c, em + e) : mult'' (cm, em) ps
